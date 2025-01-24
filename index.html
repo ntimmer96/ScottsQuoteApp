@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quote Generator</title>
-    <style>
+    <!-- <style>
       body {
         font-family: Arial, sans-serif;
         margin: 20px;
@@ -98,7 +98,7 @@
         background-color: yellow;
         font-weight: bold;
       }
-    </style>
+    </style> -->
   </head>
   <body>
     <h1>New Equipment Sales Quote</h1>
@@ -235,20 +235,32 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Machine</th>
+              <th>Category</th>
+              <th>Sub-Category</th>
+              <th>Equipment</th>
+              <th>Asset ID</th>
               <th>Serial Number</th>
               <th>Price</th>
+              <th>Freight</th>
+              <th>Margin</th>
+              <th>Machine Specifics</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody id="machine-details">
             <tr>
               <td>1</td>
-              <td><input type="text" name="machine[]" required /></td>
+              <td><input type="text" name="category[]" required /></td>
+              <td><input type="text" name="sub-category[]" required /></td>
+              <td><input type="text" name="equipment[]" required /></td>
+              <td><input type="text" name="asset-id[]" required /></td>
               <td><input type="text" name="serial-number[]" required /></td>
               <td>
                 <input type="number" name="price[]" step="0.01" required />
               </td>
+              <td><input type="text" name="freight[]" required /></td>
+              <td><input type="text" name="margin[]" required /></td>
+              <td><input type="text" name="machine-specifics[]" required /></td>
               <td>
                 <button type="button" onclick="removeRow(this)">Remove</button>
               </td>
@@ -266,14 +278,26 @@
           <thead>
             <tr>
               <th>#</th>
+              <th>Attachment</th>
+              <th>Brand</th>
+              <th>Type</th>
+              <th>Asset ID</th>
               <th>Serial Number</th>
               <th>Price</th>
+              <th>Freight</th>
+              <th>Margin</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody id="attachments">
             <tr>
               <td>1</td>
+              <td><input type="text" name="attachment-name[]" required /></td>
+              <td><input type="text" name="attachment-brand[]" required /></td>
+              <td><input type="text" name="attachment-type[]" required /></td>
+              <td>
+                <input type="text" name="attachment-asset-id[]" required />
+              </td>
               <td>
                 <input type="text" name="attachment-serial-number[]" required />
               </td>
@@ -286,6 +310,10 @@
                 />
               </td>
               <td>
+                <input type="text" name="attachment-freight[]" required />
+              </td>
+              <td><input type="text" name="attachment-margin[]" required /></td>
+              <td>
                 <button type="button" onclick="removeRow(this)">Remove</button>
               </td>
             </tr>
@@ -297,6 +325,28 @@
       </div>
 
       <div class="section">
+        <h2>Branch Location Services</h2>
+        <label for="rebate">Delivery To Customer</label>
+        <input
+          type="checkbox"
+          id="delivery-to-customer"
+          name="delivery-to-customer"
+        />
+
+        <label for="rebate">PDI</label>
+        <input type="number" id="pdi" name="pdi" />
+
+        <label for="rebate">Fuel</label>
+        <input type="number" id="fuel" name="fuel" />
+
+        <label for="rebate">Margin</label>
+        <input type="number" id="branch-margin" name="margin" step="0.01" />
+
+        <label for="rebate">Rebate</label>
+        <input type="checkbox" id="rebate" name="rebate" step="0.01" />
+      </div>
+
+      <!-- <div class="section">
         <h2>Summary</h2>
         <label for="rebate">Rebate</label>
         <input type="number" id="rebate" name="rebate" step="0.01" />
@@ -314,7 +364,7 @@
             <input type="number" id="final-price" name="final-price" readonly />
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div style="text-align: center; margin-bottom: 20px">
         <button type="button" onclick="generateQuote()">Generate Quote</button>
@@ -325,23 +375,59 @@
     <script>
       function addRow(tableId) {
         const table = document.getElementById(tableId);
+        if (!table) {
+          console.error(`Table with id "${tableId}" not found.`);
+          return;
+        }
+
         const newRow = table.insertRow();
         const rowCount = table.rows.length;
-        newRow.innerHTML = `
-                <td>${rowCount}</td>
-                <td><input type="text" name="machine[]" required /></td>
-                <td><input type="text" name="serial-number[]" required /></td>
-                <td><input type="number" name="price[]" step="0.01" required /></td>
-                <td><button type="button" onclick="removeRow(this)">Remove</button></td>
-            `;
+
+        // Try to get the column count from <thead> or fallback to <tbody>
+        let columnCount;
+        const headerRow = table.querySelector("thead tr");
+        if (headerRow) {
+          columnCount = headerRow.children.length;
+        } else {
+          // Fallback: Assume all rows in <tbody> have the same number of columns
+          const firstRow = table.querySelector("tbody tr");
+          columnCount = firstRow ? firstRow.children.length : 0;
+        }
+
+        if (columnCount === 0) {
+          console.error(
+            `Unable to determine column count for table with id "${tableId}".`
+          );
+          return;
+        }
+
+        // Dynamically generate row content
+        let rowContent = `<td>${rowCount}</td>`;
+        for (let i = 1; i < columnCount - 1; i++) {
+          // Exclude row number and "Remove" button
+          rowContent += `<td><input type="text" name="column-${i}[]" required /></td>`;
+        }
+        rowContent += `<td><button type="button" onclick="removeRow(this)">Remove</button></td>`;
+
+        newRow.innerHTML = rowContent;
         updateRowNumbers(tableId);
       }
 
       function removeRow(button) {
         const row = button.closest("tr");
-        const tableId = row.parentNode.id;
-        row.remove();
-        updateRowNumbers(tableId);
+        const table = row.closest("table");
+        const rowCount = table.rows.length;
+
+        // If only one row remains, clear its content instead of removing it
+        if (rowCount <= 1) {
+          Array.from(row.querySelectorAll("input")).forEach((input) => {
+            input.value = ""; // Clear the input fields
+          });
+        } else {
+          row.remove(); // Remove the row if more than one exists
+        }
+
+        updateRowNumbers(table.id);
       }
 
       function updateRowNumbers(tableId) {
@@ -394,9 +480,15 @@
                 populateRows(
                   "machine-details",
                   data[key],
-                  "machine[]",
+                  "category[]",
+                  "sub-category[]",
+                  "equipment[]",
+                  "asset-id[]",
                   "serial-number[]",
-                  "price[]"
+                  "price[]",
+                  "freight[]",
+                  "margin[]",
+                  "machine-specifics[]"
                 );
               } else if (
                 Array.isArray(data[key]) &&
@@ -405,8 +497,14 @@
                 populateRows(
                   "attachments",
                   data[key],
+                  "attachment-name[]",
+                  "attachment-brand[]",
+                  "attachment-type[]",
+                  "attachment-asset-id[]",
                   "attachment-serial-number[]",
-                  "attachment-price[]"
+                  "attachment-price[]",
+                  "attachment-freight[]",
+                  "attachment-margin[]"
                 );
               } else if (inputs[0] && !Array.isArray(data[key])) {
                 inputs[0].value = data[key];
@@ -475,42 +573,86 @@
           document.querySelectorAll("#machine-details tr")
         )
           .map((row, index) => {
-            const machine =
-              row.querySelector('input[name="machine[]"]').value || "N/A";
+            // Safely get each field and handle empty or missing values
+            const category =
+              row.querySelector('input[name="category[]"]')?.value || "N/A";
+            const subCategory =
+              row.querySelector('input[name="sub-category[]"]')?.value || "N/A";
+            const equipment =
+              row.querySelector('input[name="equipment[]"]')?.value || "N/A";
+            const assetId =
+              row.querySelector('input[name="asset-id[]"]')?.value || "N/A";
             const serialNumber =
-              row.querySelector('input[name="serial-number[]"]').value || "N/A";
+              row.querySelector('input[name="serial-number[]"]')?.value ||
+              "N/A";
             const price =
-              parseFloat(row.querySelector('input[name="price[]"]').value) || 0;
-            return `<tr><td>${
-              index + 1
-            }</td><td>${machine}</td><td>${serialNumber}</td><td>${price.toFixed(
-              2
-            )}</td></tr>`;
+              parseFloat(row.querySelector('input[name="price[]"]')?.value) ||
+              0;
+            const freight =
+              row.querySelector('input[name="freight[]"]')?.value || "N/A";
+            const margin =
+              row.querySelector('input[name="margin[]"]')?.value || "N/A";
+            const specifics =
+              row.querySelector('input[name="machine-specifics[]"]')?.value ||
+              "N/A";
+
+            return `<tr>
+            <td>${index + 1}</td>
+            <td>${category}</td>
+            <td>${subCategory}</td>
+            <td>${equipment}</td>
+            <td>${assetId}</td>
+            <td>${serialNumber}</td>
+            <td>${price.toFixed(2)}</td>
+            <td>${freight}</td>
+            <td>${margin}</td>
+            <td>${specifics}</td>
+        </tr>`;
           })
           .join("");
 
+        // Create the machine details table
         const machineDetails = `
-        <h2>Details</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Machine</th>
-                    <th>Serial Number</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${machineDetailsRows}
-            </tbody>
-        </table>
-    `;
+    <h2>Machine Details</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Category</th>
+                <th>Sub-Category</th>
+                <th>Equipment</th>
+                <th>Asset ID</th>
+                <th>Serial Number</th>
+                <th>Price</th>
+                <th>Freight</th>
+                <th>Margin</th>
+                <th>Specifics</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${machineDetailsRows}
+        </tbody>
+    </table>
+`;
 
-        // Collect Attachments
+        // Collect Attachment Details
         const attachmentRows = Array.from(
           document.querySelectorAll("#attachments tr")
         )
           .map((row, index) => {
+            // Safely get each field and handle empty or missing values
+            const attachment =
+              row.querySelector('input[name="attachment-name[]"]')?.value ||
+              "N/A";
+            const brand =
+              row.querySelector('input[name="attachment-brand[]"]')?.value ||
+              "N/A";
+            const type =
+              row.querySelector('input[name="attachment-type[]"]')?.value ||
+              "N/A";
+            const assetId =
+              row.querySelector('input[name="attachment-asset-id[]"]')?.value ||
+              "N/A";
             const serialNumber =
               row.querySelector('input[name="attachment-serial-number[]"]')
                 ?.value || "N/A";
@@ -518,28 +660,49 @@
               parseFloat(
                 row.querySelector('input[name="attachment-price[]"]')?.value
               ) || 0;
+            const freight =
+              row.querySelector('input[name="attachment-freight[]"]')?.value ||
+              "N/A";
+            const margin =
+              row.querySelector('input[name="attachment-margin[]"]')?.value ||
+              "N/A";
 
-            return `<tr><td>${
-              index + 1
-            }</td><td>${serialNumber}</td><td>${price.toFixed(2)}</td></tr>`;
+            return `<tr>
+            <td>${index + 1}</td>
+            <td>${attachment}</td>
+            <td>${brand}</td>
+            <td>${type}</td>
+            <td>${assetId}</td>
+            <td>${serialNumber}</td>
+            <td>${price.toFixed(2)}</td>
+            <td>${freight}</td>
+            <td>${margin}</td>
+        </tr>`;
           })
           .join("");
 
+        // Create the attachments table
         const attachments = `
-        <h2>Attachments</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Serial Number</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${attachmentRows}
-            </tbody>
-        </table>
-    `;
+    <h2>Attachments</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Attachment</th>
+                <th>Brand</th>
+                <th>Type</th>
+                <th>Asset ID</th>
+                <th>Serial Number</th>
+                <th>Price</th>
+                <th>Freight</th>
+                <th>Margin</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${attachmentRows}
+        </tbody>
+    </table>
+`;
 
         // Calculate Summary
         const machineTotal = Array.from(
