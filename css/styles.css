@@ -1,0 +1,93 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+h1,
+h2 {
+  text-align: center;
+}
+
+.account-information,
+.company-information,
+.section {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.account-section,
+.company-section {
+  display: inline-block;
+  width: 48%;
+  vertical-align: top;
+  margin-bottom: 10px;
+}
+
+.account-section label,
+.company-section label,
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.account-section input,
+.company-section input,
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="percent"] {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+table,
+th,
+td {
+  border: 1px solid #ddd;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.highlight {
+  background-color: yellow;
+  font-weight: bold;
+}
+
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+@media print {
+  #printButton {
+    display: none !important;
+  }
+}
