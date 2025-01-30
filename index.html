@@ -5,6 +5,101 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quote Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1,
+    h2 {
+      text-align: center;
+    }
+
+    .account-information,
+    .company-information,
+    .section {
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+
+    .account-section,
+    .company-section {
+      display: inline-block;
+      width: 48%;
+      vertical-align: top;
+      margin-bottom: 10px;
+    }
+
+    .account-section label,
+    .company-section label,
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .account-section input,
+    .company-section input,
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="percent"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid #ddd;
+    }
+
+    th,
+    td {
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .highlight {
+      background-color: yellow;
+      font-weight: bold;
+    }
+
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    @media print {
+      #printButton {
+        display: none !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -14,94 +109,73 @@
     <input type="file" id="import-file" style="display: none" accept=".json" onchange="handleFile(event)" />
   </div>
   <form id="quote-form">
-    <h2>Acount Information</h2>
+    <h2>Account Information</h2>
     <div class="account-information">
       <div class="account-section">
         <h3>Customer Information</h3>
         <label for="business-name">Company</label>
         <input type="text" id="company" name="account-business-name" required />
-
         <label for="first-name">First Name</label>
         <input type="text" id="first-name" name="account-first-name" required />
-
         <label for="last-name">Last Name</label>
         <input type="text" id="last-name" name="account-last-name" required />
-
         <label for="email">E-mail</label>
         <input type="email" id="customer-email" name="account-email" required />
-
         <label for="contact-number">Contact Number</label>
         <input type="tel" id="customer-contact-number" name="account-contact-number" required />
       </div>
-
       <div class="account-section">
         <h3>Billing Information</h3>
         <label for="address">Address</label>
         <input type="text" id="billing-address" name="account-address" required />
-
         <label for="city">City</label>
         <input type="text" id="billing-city" name="account-city" required />
-
         <label for="state">State</label>
         <input type="text" id="billing-state" name="account-state" required />
-
         <label for="zip-code">ZIP Code</label>
         <input type="percent" id="billing-zip-code" name="account-zip-code" required />
-
         <label for="tax-rate">
           Tax Rate
           <a href="https://www.avalara.com/taxrates" target="_blank" title="Learn more about tax rates"
             style="text-decoration: none">
             &#9432;
-            <!-- Unicode for an information symbol -->
           </a>
         </label>
         <input type="text" id="billing-tax-rate" name="tax-rate" oninput="formatPercent(this)" required />
       </div>
     </div>
-
     <h2>Company Information</h2>
     <div class="company-information">
       <div class="company-section">
         <h3>Sales Representative</h3>
         <label for="user-id">User ID</label>
         <input type="text" id="sales-user-id" name="company-user-id" required />
-
         <label for="first-name">First Name</label>
         <input type="text" id="sales-first-name" name="company-first-name" required />
-
         <label for="last-name">Last Name</label>
         <input type="text" id="sales-last-name" name="company-last-name" required />
-
         <label for="email">E-mail</label>
         <input type="email" id="sales-customer-email" name="company-email" required />
-
         <label for="contact-number">Contact Number</label>
         <input type="tel" id="sales-contact-number" name="company-contact-number" required />
       </div>
-
       <div class="company-section">
         <h3>Branch Location</h3>
         <label for="address">Address</label>
         <input type="text" id="branch-address" name="company-address" required />
-
         <label for="city">City</label>
         <input type="text" id="branch-city" name="company-city" required />
-
         <label for="state">State</label>
         <input type="text" id="branch-state" name="company-state" required />
-
         <label for="zip-code">ZIP Code</label>
         <input type="text" id="branch-zip-code" name="company-zip-code" required />
       </div>
     </div>
-
     <div class="section">
       <h2>Machine</h2>
       <table>
         <thead>
           <tr>
-            <th>#</th>
             <th>Category</th>
             <th>Equipment</th>
             <th>Asset ID</th>
@@ -115,34 +189,25 @@
         </thead>
         <tbody id="machine-details">
           <tr>
-            <td>1</td>
             <td><input type="text" name="category[]" required /></td>
             <td><input type="text" name="equipment[]" required /></td>
             <td><input type="text" name="asset-id[]" required /></td>
             <td><input type="text" name="serial-number[]" required /></td>
-            <td>
-              <input type="text" name="price[]" required />
-            </td>
-            <td><input type="text" name="freight[]" required /></td>
-            <td><input type="percent" name="margin[]" required oninput="formatPercent(this)" /></td>
+            <td><input type="text" name="price[]" oninput="formatNumber(this)" required /></td>
+            <td><input type="text" name="freight[]" oninput="formatNumber(this)" required /></td>
+            <td><input type="text" name="margin[]" oninput="formatPercent(this)" required /></td>
             <td><input type="text" name="machine-specifics[]" /></td>
-            <td>
-              <button type="button" onclick="removeRow(this)">Remove</button>
-            </td>
+            <td><button type="button" onclick="removeRow(this)">Remove</button></td>
           </tr>
         </tbody>
       </table>
-      <button type="button" onclick="addRow('machine-details')">
-        Add Machine
-      </button>
+      <button type="button" onclick="addRow('machine-details')">Add Machine</button>
     </div>
-
     <div class="section">
       <h2>Attachments</h2>
       <table>
         <thead>
           <tr>
-            <th>#</th>
             <th>Attachment</th>
             <th>Brand</th>
             <th>Type</th>
@@ -156,58 +221,38 @@
         </thead>
         <tbody id="attachments">
           <tr>
-            <td>1</td>
             <td><input type="text" name="attachment-name[]" required /></td>
             <td><input type="text" name="attachment-brand[]" required /></td>
             <td><input type="text" name="attachment-type[]" required /></td>
-            <td>
-              <input type="text" name="attachment-asset-id[]" required />
-            </td>
-            <td>
-              <input type="text" name="attachment-serial-number[]" required />
-            </td>
-            <td>
-              <input type="text" name="attachment-price[]" />
-            </td>
-            <td>
-              <input type="text" name="attachment-freight[]" required />
-            </td>
-            <td><input type="percent" name="attachment-margin[]" oninput="formatPercent(this)" required /></td>
-            <td>
-              <button type="button" onclick="removeRow(this)">Remove</button>
-            </td>
+            <td><input type="text" name="attachment-asset-id[]" required /></td>
+            <td><input type="text" name="attachment-serial-number[]" required /></td>
+            <td><input type="text" name="attachment-price[]" oninput="formatNumber(this)" required /></td>
+            <td><input type="text" name="attachment-freight[]" oninput="formatNumber(this)" required /></td>
+            <td><input type="text" name="attachment-margin[]" oninput="formatPercent(this)" required /></td>
+            <td><button type="button" onclick="removeRow(this)">Remove</button></td>
           </tr>
         </tbody>
       </table>
-      <button type="button" onclick="addRow('attachments')">
-        Add Attachment
-      </button>
+      <button type="button" onclick="addRow('attachments')">Add Attachment</button>
     </div>
-
     <div class="section">
       <h2>Branch Location Services</h2>
       <label for="rebate">Delivery To Customer</label>
       <input type="checkbox" id="delivery-to-customer" name="delivery-to-customer" />
-
       <label for="pdi">PDI</label>
       <input type="text" id="pdi" name="pdi" />
-
       <label for="fuel">Fuel</label>
-      <input type="text" id="fuel" name="fuel" />
-
+      <input type="text" id="fuel" name="fuel" oninput="formatNumber(this)" />
       <label for="margin">Margin</label>
       <input type="percent" id="branch-margin" name="margin" />
-
       <label for="rebate">Rebate</label>
-      <input type="text" id="rebate" name="rebate" />
+      <input type="text" id="rebate" name="rebate" oninput="formatNumber(this)" />
     </div>
-
     <div style="text-align: center; margin-bottom: 15px; margin-top: 15px">
       <button type="button" onclick="generateQuote()">Generate Quote</button>
-      <button onclick="exportData()">Export Data</button>
+      <button id="printButton" onclick="exportData()">Export Data</button>
     </div>
   </form>
-
   <script>
     function addRow(tableId) {
       const table = document.getElementById(tableId);
@@ -217,32 +262,22 @@
       }
 
       const newRow = table.insertRow();
-      const rowCount = table.rows.length;
+      const fieldNames = tableId === "machine-details" ? [
+        "category[]", "equipment[]", "asset-id[]", "serial-number[]", "price[]", "freight[]", "margin[]", "machine-specifics[]"
+      ] : [
+        "attachment-name[]", "attachment-brand[]", "attachment-type[]", "attachment-asset-id[]", "attachment-serial-number[]", "attachment-price[]", "attachment-freight[]", "attachment-margin[]"
+      ];
 
-      // Try to get the column count from <thead> or fallback to <tbody>
-      let columnCount;
-      const headerRow = table.querySelector("thead tr");
-      if (headerRow) {
-        columnCount = headerRow.children.length;
-      } else {
-        // Fallback: Assume all rows in <tbody> have the same number of columns
-        const firstRow = table.querySelector("tbody tr");
-        columnCount = firstRow ? firstRow.children.length : 0;
-      }
-
-      if (columnCount === 0) {
-        console.error(
-          `Unable to determine column count for table with id "${tableId}".`
-        );
-        return;
-      }
-
-      // Dynamically generate row content
-      let rowContent = `<td>${rowCount}</td>`;
-      for (let i = 1; i < columnCount - 1; i++) {
-        // Exclude row number and "Remove" button
-        rowContent += `<td><input type="text" name="column-${i}[]" required /></td>`;
-      }
+      let rowContent = "";
+      fieldNames.forEach(name => {
+        if (name.includes("margin[]")) {
+          rowContent += `<td><input type="text" name="${name}" required oninput="formatPercent(this)" /></td>`;
+        } else if (name.includes("price[]") || name.includes("freight[]")) {
+          rowContent += `<td><input type="text" name="${name}" required oninput="formatNumber(this)" /></td>`;
+        } else {
+          rowContent += `<td><input type="text" name="${name}" required /></td>`;
+        }
+      });
       rowContent += `<td><button type="button" onclick="removeRow(this)">Remove</button></td>`;
 
       newRow.innerHTML = rowContent;
@@ -253,7 +288,6 @@
       const table = row.closest("table");
       const rowCount = table.rows.length;
 
-      // If only one row remains, clear its content instead of removing it
       if (rowCount <= 1) {
         Array.from(row.querySelectorAll("input")).forEach((input) => {
           input.value = ""; // Clear the input fields
@@ -261,51 +295,34 @@
       } else {
         row.remove(); // Remove the row if more than one exists
       }
+
+      if (table.rows.length === 0) {
+        addRow(table.id); // Add a new row if the table is empty
+      }
     }
 
     function formatNumber(input) {
-      // Get the current cursor position
       let cursorPosition = input.selectionStart;
-
-      // Remove non-numeric characters (except for numbers)
       let value = input.value.replace(/,/g, "");
-
-      // Format number with commas
-      let formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-      // Update input field with formatted value
+      let formattedValue = Number(value).toLocaleString("en-US");
       input.value = formattedValue;
-
-      // Restore cursor position
       let diff = formattedValue.length - value.length;
       input.setSelectionRange(cursorPosition + diff, cursorPosition + diff);
     }
 
     function formatPercent(input) {
-      // Store cursor position
       let cursorPosition = input.selectionStart;
-
-      // Remove non-numeric characters (except numbers)
-      let value = input.value.replace(/[^0-9]/g, "");
-
-      // Prevents non-numeric input (optional)
-      if (!/^\d*$/.test(value)) return;
-
-      // Append '%' symbol
+      let value = input.value.replace(/[^0-9.]/g, "");
+      if (!/^\d*\.?\d*$/.test(value)) return;
       let formattedValue = value ? value + "%" : "";
-
-      // Update input field with formatted value
       input.value = formattedValue;
-
-      // Adjust cursor position (before the % sign)
-      input.setSelectionRange(formattedValue.length - 1, formattedValue.length - 1);
+      input.setSelectionRange(cursorPosition + (formattedValue.length - value.length), cursorPosition + (formattedValue.length - value.length));
     }
 
     function exportData() {
       const form = document.getElementById("quote-form");
       const formData = new FormData(form);
       const data = {};
-
       formData.forEach((value, key) => {
         if (!data[key]) {
           data[key] = value;
@@ -317,12 +334,16 @@
         }
       });
 
-      const blob = new Blob([JSON.stringify(data, null, 2)], {
-        type: "application/json",
-      });
+      const fileName = prompt("Enter the name of the file to save:", "quote-data");
+      if (!fileName) {
+        alert("File name is required.");
+        return;
+      }
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "quote-data.json";
+      link.download = `${fileName}.json`;
       link.click();
     }
 
@@ -336,40 +357,15 @@
         const reader = new FileReader();
         reader.onload = function (e) {
           const data = JSON.parse(e.target.result);
+          console.log("Imported Data: ", data); // Debugging line
 
           Object.keys(data).forEach((key) => {
             const inputs = document.getElementsByName(key);
-
-            if (Array.isArray(data[key]) && key === "machine[]") {
-              populateRows(
-                "machine-details",
-                data[key],
-                "category[]",
-                "equipment[]",
-                "asset-id[]",
-                "serial-number[]",
-                "price[]",
-                "freight[]",
-                "margin[]",
-                "machine-specifics[]"
-              );
-            } else if (
-              Array.isArray(data[key]) &&
-              key === "attachment-serial-number[]"
-            ) {
-              populateRows(
-                "attachments",
-                data[key],
-                "attachment-name[]",
-                "attachment-brand[]",
-                "attachment-type[]",
-                "attachment-asset-id[]",
-                "attachment-serial-number[]",
-                "attachment-price[]",
-                "attachment-freight[]",
-                "attachment-margin[]"
-              );
-            } else if (inputs[0] && !Array.isArray(data[key])) {
+            if (Array.isArray(data[key]) && (key.includes("category") || key.includes("equipment") || key.includes("asset-id") || key.includes("serial-number") || key.includes("price") || key.includes("freight") || key.includes("margin") || key.includes("machine-specifics"))) {
+              populateRows("machine-details", data, "category[]", "equipment[]", "asset-id[]", "serial-number[]", "price[]", "freight[]", "margin[]", "machine-specifics[]");
+            } else if (Array.isArray(data[key]) && (key.includes("attachment-name") || key.includes("attachment-brand") || key.includes("attachment-type") || key.includes("attachment-asset-id") || key.includes("attachment-serial-number") || key.includes("attachment-price") || key.includes("attachment-freight") || key.includes("attachment-margin"))) {
+              populateRows("attachments", data, "attachment-name[]", "attachment-brand[]", "attachment-type[]", "attachment-asset-id[]", "attachment-serial-number[]", "attachment-price[]", "attachment-freight[]", "attachment-margin[]");
+            } else if (inputs.length > 0) {
               inputs[0].value = data[key];
             }
           });
@@ -378,88 +374,82 @@
       }
     }
 
-    function populateRows(tableId, rows, ...fields) {
+    function populateRows(tableId, data, ...fields) {
       const table = document.getElementById(tableId);
-
-      // Clear existing rows
       table.innerHTML = "";
+      const rowCount = data[fields[0]].length;
 
-      rows.forEach((_, index) => {
+      for (let i = 0; i < rowCount; i++) {
         const newRow = table.insertRow();
-        newRow.innerHTML = `
-                    <td>${index + 1}</td>
-                    ${fields
-            .map(
-              (field) =>
-                `<td><input type="text" name="${field}" value="${rows[index][field.replace("[]", "")] || ""
-                }"/></td>`
-            )
-            .join("")}
-                    <td><button type="button" onclick="removeRow(this)">Remove</button></td>
-                `;
-      });
+        fields.forEach(field => {
+          const cell = newRow.insertCell();
+          cell.innerHTML = `<input type="text" name="${field}" value="${data[field][i] || ""}" required />`;
+        });
+        const actionCell = newRow.insertCell();
+        actionCell.innerHTML = `<button type="button" onclick="removeRow(this)">Remove</button>`;
+      }
     }
 
     function generateQuote() {
       const form = document.getElementById("quote-form");
       const formData = new FormData(form);
 
-      // Function to format numbers with commas
       function formatCurrency(value) {
         return parseFloat(value).toLocaleString("en-US", { minimumFractionDigits: 2 });
       }
 
-      // Function to safely parse numbers and remove commas
       function parseNumber(value) {
         return parseFloat(value.replace(/,/g, "")) || 0;
       }
 
+      // URL of the image you want to include
+      const imageUrl = "./images/SandS.png";  // Replace with your image URL
+
       // Collect Customer Information
       const customerInfo = `
-        <h2>Customer Information</h2>
-        <div style="display: grid; grid-auto-flow: column;">
-          <p>
-              <br>
-              Business Name: ${formData.get("account-business-name") || "N/A"}<br>
-              First Name: ${formData.get("account-first-name") || "N/A"}<br>
-              Last Name: ${formData.get("account-last-name") || "N/A"}<br>
-              Email: ${formData.get("account-email") || "N/A"}<br>
-              Contact Number: ${formData.get("account-contact-number") || "N/A"}<br>
-          </p>
-          <p>
-              <u>Billing Address</u><br>
-              Address: ${formData.get("account-address") || "N/A"}<br>
-              City: ${formData.get("account-city") || "N/A"}<br>
-              State: ${formData.get("account-state") || "N/A"}<br>
-              ZIP Code: ${formData.get("account-zip-code") || "N/A"}<br>
-          </p>
-        </div>
-    `;
+    <h2>Customer Information</h2>
+    <div style="display: grid; grid-auto-flow: column;">
+      <p>
+          <br>
+          Business Name: ${formData.get("account-business-name") || "N/A"}<br>
+          First Name: ${formData.get("account-first-name") || "N/A"}<br>
+          Last Name: ${formData.get("account-last-name") || "N/A"}<br>
+          Email: ${formData.get("account-email") || "N/A"}<br>
+          Contact Number: ${formData.get("account-contact-number") || "N/A"}<br>
+      </p>
+      <p>
+          <u>Billing Address</u><br>
+          Address: ${formData.get("account-address") || "N/A"}<br>
+          City: ${formData.get("account-city") || "N/A"}<br>
+          State: ${formData.get("account-state") || "N/A"}<br>
+          ZIP Code: ${formData.get("account-zip-code") || "N/A"}<br>
+      </p>
+    </div>
+  `;
 
       // Collect Company Information
       const companyInfo = `
-        <h2>Company Information</h2>
-        <div style="display: grid; grid-auto-flow: column;">
-          <p>
-              <br>
-              Sales Representative: ${formData.get("company-first-name") + " " + formData.get("company-last-name") || "N/A"}<br>
-              E-Mail: ${formData.get("company-email") || "N/A"}<br>
-              Contact Number: ${formData.get("company-contact-number") || "N/A"}<br>
-          </p>
-          <p>
-              <u>Branch Location</u><br>
-              Address: ${formData.get("company-address") || "N/A"}<br>
-              City: ${formData.get("company-city") || "N/A"}<br>
-              State: ${formData.get("company-state") || "N/A"}<br>
-              ZIP Code: ${formData.get("company-zip") || "N/A"}<br>
-          </p>
-        </div>
-    `;
+    <h2>Company Information</h2>
+    <div style="display: grid; grid-auto-flow: column;">
+      <p>
+          <br>
+          Sales Representative: ${formData.get("company-first-name") + " " + formData.get("company-last-name") || "N/A"}<br>
+          E-Mail: ${formData.get("company-email") || "N/A"}<br>
+          Contact Number: ${formData.get("company-contact-number") || "N/A"}<br>
+      </p>
+      <p>
+          <u>Branch Location</u><br>
+          Address: ${formData.get("company-address") || "N/A"}<br>
+          City: ${formData.get("company-city") || "N/A"}<br>
+          State: ${formData.get("company-state") || "N/A"}<br>
+          ZIP Code: ${formData.get("company-zip") || "N/A"}<br>
+      </p>
+    </div>
+  `;
 
       // Collect Machine Details
-      const machineDetailsRows = Array.from(document.querySelectorAll("#machine-details tr")) // Select all rows
-        .map((row, index) => {
-          // Ensure row has input fields before processing
+      const machineDetailsRows = Array.from(document.querySelectorAll("#machine-details tr"))
+        .map(row => {
           const categoryInput = row.querySelector('input[name="category[]"]');
           const equipmentInput = row.querySelector('input[name="equipment[]"]');
           if (!categoryInput || !equipmentInput) return ""; // Skip invalid rows
@@ -471,45 +461,42 @@
           const freight = parseNumber(row.querySelector('input[name="freight[]"]')?.value) || 0;
           const marginPercent = parseNumber(row.querySelector('input[name="margin[]"]')?.value) || 0;
 
-          const subtotal = originalPrice + freight;
-          const margin = subtotal * (marginPercent / 100);
-          const price = subtotal + margin;
+          const subtotal = (originalPrice + freight).toFixed(2);
+          const margin = (subtotal * (marginPercent / 100)).toFixed(2);
+          const price = (parseFloat(subtotal) + parseFloat(margin)).toFixed(2);
 
           const specifics = row.querySelector('input[name="machine-specifics[]"]')?.value.trim() || "N/A";
 
           return `<tr>
-        <td>${index + 1}</td>
         <td>${category} ${equipment}</td>
         <td>${serialNumber}</td>
-        <td>$${price.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+        <td>$${formatCurrency(price)}</td>
         <td>${specifics}</td>
       </tr>`;
         })
-        .filter(row => row !== "") // Remove any empty rows
+        .filter(row => row !== "")
         .join("");
 
-      const machineDetails = `
+      const machineDetails = machineDetailsRows ? `
     <h2>Machine Details</h2>
     <table>
         <thead>
             <tr>
-                <th>#</th>
                 <th>Machine</th>
                 <th>Serial Number</th>
-                <th>Price</th>
+                <th>Cost</th>
                 <th>Specifics</th>
             </tr>
         </thead>
         <tbody>
-            ${machineDetailsRows || "<tr><td colspan='5'>No machine details available</td></tr>"}
+            ${machineDetailsRows || "<tr><td colspan='4'>No machine details available</td></tr>"}
         </tbody>
     </table>
-`;
+  ` : "";
 
       // Collect Attachment Details
-      const attachmentRows = Array.from(document.querySelectorAll("#attachments tr")) // Select all rows
-        .map((row, index) => {
-          // Ensure row has input fields before processing
+      const attachmentRows = Array.from(document.querySelectorAll("#attachments tr"))
+        .map(row => {
           const attachmentInput = row.querySelector('input[name="attachment-name[]"]');
           const brandInput = row.querySelector('input[name="attachment-brand[]"]');
           if (!attachmentInput || !brandInput) return ""; // Skip invalid rows
@@ -522,40 +509,38 @@
           const freight = parseNumber(row.querySelector('input[name="attachment-freight[]"]')?.value) || 0;
           const marginPercent = parseNumber(row.querySelector('input[name="attachment-margin[]"]')?.value) || 0;
 
-          const subtotal = originalPrice + freight;
-          const margin = subtotal * (marginPercent / 100);
-          const price = subtotal + margin;
+          const subtotal = (originalPrice + freight).toFixed(2);
+          const margin = (subtotal * (marginPercent / 100)).toFixed(2);
+          const price = (parseFloat(subtotal) + parseFloat(margin)).toFixed(2);
 
           return `<tr>
-        <td>${index + 1}</td>
         <td>${attachment}</td>
         <td>${brand}</td>
         <td>${type}</td>
         <td>${serialNumber}</td>
-        <td>$${price.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+        <td>$${formatCurrency(price)}</td>
       </tr>`;
         })
-        .filter(row => row !== "") // Remove any empty rows
+        .filter(row => row !== "")
         .join("");
 
-      const attachments = `
+      const attachments = attachmentRows ? `
     <h2>Attachments</h2>
     <table>
         <thead>
             <tr>
-                <th>#</th>
                 <th>Attachment</th>
                 <th>Brand</th>
                 <th>Type</th>
                 <th>Serial Number</th>
-                <th>Price</th>
+                <th>Cost</th>
             </tr>
         </thead>
         <tbody>
-            ${attachmentRows || "<tr><td colspan='6'>No attachment details available</td></tr>"}
+            ${attachmentRows || "<tr><td colspan='5'>No attachment details available</td></tr>"}
         </tbody>
     </table>
-`
+  ` : "";
 
       // Calculate Total Rebate
       const rebateInputs = document.querySelectorAll('input[name="rebate"]');
@@ -564,104 +549,118 @@
         0
       );
 
-      // Calculate Subtotals
       // Calculate Subtotals using updated price values
       const machineTotal = Array.from(document.querySelectorAll("#machine-details tr"))
-        .map((row) => {
+        .reduce((sum, row) => {
           const originalPrice = parseNumber(row.querySelector('input[name="price[]"]')?.value) || 0;
           const freight = parseNumber(row.querySelector('input[name="freight[]"]')?.value) || 0;
           const marginPercent = parseNumber(row.querySelector('input[name="margin[]"]')?.value) || 0;
 
           const subtotal = originalPrice + freight;
           const margin = subtotal * (marginPercent / 100);
-          return subtotal + margin;
-        })
-        .reduce((sum, price) => sum + price, 0);
+          const price = subtotal + margin;
 
+          return sum + price;
+        }, 0);
 
       const attachmentTotal = Array.from(document.querySelectorAll("#attachments tr"))
-        .map((row) => {
+        .reduce((sum, row) => {
           const originalPrice = parseNumber(row.querySelector('input[name="attachment-price[]"]')?.value) || 0;
           const freight = parseNumber(row.querySelector('input[name="attachment-freight[]"]')?.value) || 0;
           const marginPercent = parseNumber(row.querySelector('input[name="attachment-margin[]"]')?.value) || 0;
 
           const subtotal = originalPrice + freight;
           const margin = subtotal * (marginPercent / 100);
-          return subtotal + margin;
-        })
-        .reduce((sum, price) => sum + price, 0);
+          const price = subtotal + margin;
+
+          return sum + price;
+        }, 0);
 
       // Compute Final Calculations
-      const subTotal = machineTotal + attachmentTotal - totalRebate;
+      const subTotal = machineTotal + attachmentTotal;
       const salesTaxRate = parseNumber(document.getElementById("billing-tax-rate").value) / 100;
       const salesTax = subTotal * salesTaxRate;
-      const finalPrice = subTotal + salesTax;
+      const finalPrice = subTotal + salesTax - totalRebate;
 
       // Generate Summary Section with Formatted Numbers
-      const summary = `
+      let summary = `
     <h2>Summary</h2>
     <table>
-        <tr><td>Total Rebate:</td><td>$${formatCurrency(totalRebate)}</td></tr>
-        <tr><td>Sub Total:</td><td>$${formatCurrency(subTotal)}</td></tr>
-        <tr><td>Sales Tax:</td><td>$${formatCurrency(salesTax)}</td></tr>
-        <tr><td><strong>Final Price:</strong></td><td class="highlight">$${formatCurrency(finalPrice)}</td></tr>
+        <tr><td>Sub Total:</td><td>$${subTotal.toFixed(2)}</td></tr>
+        <tr><td>Sales Tax:</td><td>$${salesTax.toFixed(2)}</td></tr>
+  `;
+
+      if (totalRebate > 0) {
+        summary += `<tr><td>Rebate:</td><td>-$${totalRebate.toFixed(2)}</td></tr>`;
+      }
+
+      summary += `
+        <tr><td><strong>Final Price:</strong></td><td class="highlight">$${finalPrice.toFixed(2)}</td></tr>
     </table>
-`;
+  `;
 
       // Signature Section
       const signatureSection = `
-        <h2>Signature</h2>
-        <p>______________________________</p>
-        <p>Authorized Signature</p>
-    `;
+    <h2>Signature</h2>
+    <br>
+    <p>_________________________________________________</p>
+    <p>Authorized Signature</p>
+  `;
 
       // Print Button
       const printButton = `
-        <button id='printButton' onclick="window.print()" style="
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-
-        ">Print Quote</button>
-    `;
+    <button id='printButton' onclick="window.print()" style="
+        display: block;
+        margin: 20px auto;
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+    ">Print Quote</button>
+  `;
 
       // Open New Window for Generated Quote
-      // Change the title to whatever you want, will show on page when printed. Can leave blank
       const quoteWindow = window.open("", "", "width=800,height=600");
       quoteWindow.document.write(`
-        <html>
-        <head>
-            <title></title>
-            <style>
-                body { font-family: Arial, sans-serif; margin: 20px; }
-                h1, h2 { text-align: center; }
-                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-                table, th, td { border: 1px solid #ddd; }
-                th, td { padding: 8px; text-align: left; }
-                th { background-color: #f2f2f2; }
-                .highlight { background-color: yellow; font-weight: bold; }
-                p { text-align: center; }
-            </style>
-        </head>
-        <body>
-            <h1>New Equipment Sales Quote</h1>
-            ${customerInfo}
-            ${companyInfo}
-            ${machineDetails}
-            ${attachments}
-            ${summary}
-            ${signatureSection}
-            ${printButton}
-        </body>
-        </html>
-    `);
+    <html>
+    <head>
+        <title>Equipment Sales Quote</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            h1, h2 { text-align: center; }
+            img { position: absolute; top: 20px; left: 20px; width: 150px; height: auto; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+            table, th, td { border: 1px solid #ddd; }
+            th, td { padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; }
+            .highlight { background-color: yellow; font-weight: bold; }
+            p { text-align: center; }
+            @media print {
+              #printButton {
+                display: none !important;
+              }
+            }
+        </style>
+    </head>
+    <body>
+        <img src="${imageUrl}" alt="Company Logo" />
+        <h1>New Equipment Sales Quote</h1>
+        ${customerInfo}
+        ${companyInfo}
+        ${machineDetails ? machineDetails : ''}
+        ${attachments ? attachments : ''}
+        ${summary}
+        ${signatureSection}
+        ${printButton}
+    </body>
+    </html>
+  `);
       quoteWindow.document.close();
     }
+
+
   </script>
 </body>
 
