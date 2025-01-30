@@ -103,7 +103,7 @@
 </head>
 
 <body>
-  <h1>New Equipment Sales Quote</h1>
+  <h1>Equipment Sales Quote</h1>
   <div style="text-align: center; margin-bottom: 20px">
     <button onclick="importData()">Import Data</button>
     <input type="file" id="import-file" style="display: none" accept=".json" onchange="handleFile(event)" />
@@ -135,7 +135,7 @@
         <label for="zip-code">ZIP Code</label>
         <input type="percent" id="billing-zip-code" name="account-zip-code" required />
         <label for="tax-rate">
-          Tax Rate
+          Tax Rate (%)
           <a href="https://www.avalara.com/taxrates" target="_blank" title="Learn more about tax rates"
             style="text-decoration: none">
             &#9432;
@@ -182,7 +182,7 @@
             <th>Serial Number</th>
             <th>Price</th>
             <th>Freight</th>
-            <th>Margin</th>
+            <th>Margin (%)</th>
             <th>Machine Specifics</th>
             <th>Actions</th>
           </tr>
@@ -215,7 +215,7 @@
             <th>Serial Number</th>
             <th>Price</th>
             <th>Freight</th>
-            <th>Margin</th>
+            <th>Margin (%)</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -237,11 +237,11 @@
     </div>
     <div class="section">
       <h2>Branch Location Services</h2>
-      <label for="delivery-to-customer">Delivery To Customer</label>
+      <label for="delivery-to-customer">Delivery To Customer ($)</label>
       <input type="text" id="delivery-to-customer" name="delivery-to-customer" oninput="formatNumber(this)" />
-      <label for="pdi">PDI</label>
+      <label for="pdi">PDI ($)</label>
       <input type="text" id="pdi" name="pdi" oninput="formatNumber(this)" />
-      <label for="fuel">Fuel</label>
+      <label for="fuel">Fuel ($)</label>
       <input type="text" id="fuel" name="fuel" oninput="formatNumber(this)" />
       <label for="rebate">Rebate</label>
       <input type="text" id="rebate" name="rebate" oninput="formatNumber(this)" />
@@ -648,7 +648,7 @@
   </head>
   <body>
       <img src="${imageUrl}" alt="Company Logo" />
-      <h1>New Equipment Sales Quote</h1>
+      <h1>Equipment Sales Quote</h1>
       ${customerInfo}
       ${companyInfo}
       ${machineDetails}
