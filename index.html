@@ -237,14 +237,12 @@
     </div>
     <div class="section">
       <h2>Branch Location Services</h2>
-      <label for="rebate">Delivery To Customer</label>
-      <input type="checkbox" id="delivery-to-customer" name="delivery-to-customer" />
+      <label for="delivery-to-customer">Delivery To Customer</label>
+      <input type="text" id="delivery-to-customer" name="delivery-to-customer" oninput="formatNumber(this)" />
       <label for="pdi">PDI</label>
-      <input type="text" id="pdi" name="pdi" />
+      <input type="text" id="pdi" name="pdi" oninput="formatNumber(this)" />
       <label for="fuel">Fuel</label>
       <input type="text" id="fuel" name="fuel" oninput="formatNumber(this)" />
-      <label for="margin">Margin</label>
-      <input type="percent" id="branch-margin" name="margin" />
       <label for="rebate">Rebate</label>
       <input type="text" id="rebate" name="rebate" oninput="formatNumber(this)" />
     </div>
@@ -484,7 +482,7 @@
             <tr>
                 <th>Machine</th>
                 <th>Serial Number</th>
-                <th>Cost</th>
+                <th>Price</th>
                 <th>Specifics</th>
             </tr>
         </thead>
@@ -533,7 +531,7 @@
                 <th>Brand</th>
                 <th>Type</th>
                 <th>Serial Number</th>
-                <th>Cost</th>
+                <th>Price</th>
             </tr>
         </thead>
         <tbody>
@@ -548,6 +546,11 @@
         (sum, input) => sum + parseNumber(input.value),
         0
       );
+
+      // Collect Branch Location Services
+      const deliveryToCustomer = parseNumber(formData.get("delivery-to-customer")) || 0;
+      const pdi = parseNumber(formData.get("pdi")) || 0;
+      const fuel = parseNumber(formData.get("fuel")) || 0;
 
       // Calculate Subtotals using updated price values
       const machineTotal = Array.from(document.querySelectorAll("#machine-details tr"))
@@ -577,88 +580,88 @@
         }, 0);
 
       // Compute Final Calculations
-      const subTotal = machineTotal + attachmentTotal;
+      const subTotal = machineTotal + attachmentTotal + deliveryToCustomer + pdi + fuel;
       const salesTaxRate = parseNumber(document.getElementById("billing-tax-rate").value) / 100;
       const salesTax = subTotal * salesTaxRate;
       const finalPrice = subTotal + salesTax - totalRebate;
 
       // Generate Summary Section with Formatted Numbers
       let summary = `
-    <h2>Summary</h2>
-    <table>
-        <tr><td>Sub Total:</td><td>$${subTotal.toFixed(2)}</td></tr>
-        <tr><td>Sales Tax:</td><td>$${salesTax.toFixed(2)}</td></tr>
-  `;
+  <h2>Summary</h2>
+  <table>
+      <tr><td>Sub Total:</td><td>$${subTotal.toFixed(2)}</td></tr>
+      <tr><td>Sales Tax:</td><td>$${salesTax.toFixed(2)}</td></tr>
+`;
 
       if (totalRebate > 0) {
         summary += `<tr><td>Rebate:</td><td>-$${totalRebate.toFixed(2)}</td></tr>`;
       }
 
       summary += `
-        <tr><td><strong>Final Price:</strong></td><td class="highlight">$${finalPrice.toFixed(2)}</td></tr>
-    </table>
-  `;
+      <tr><td><strong>Final Price:</strong></td><td class="highlight">$${finalPrice.toFixed(2)}</td></tr>
+  </table>
+`;
 
       // Signature Section
       const signatureSection = `
-    <h2>Signature</h2>
-    <br>
-    <p>_________________________________________________</p>
-    <p>Authorized Signature</p>
-  `;
+  <h2>Signature</h2>
+  <p>______________________________</p>
+  <p>Authorized Signature</p>
+`;
 
       // Print Button
       const printButton = `
-    <button id='printButton' onclick="window.print()" style="
-        display: block;
-        margin: 20px auto;
-        padding: 10px 20px;
-        background-color: #28a745;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 4px;
-    ">Print Quote</button>
-  `;
+  <button id='printButton' onclick="window.print()" style="
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+  ">Print Quote</button>
+`;
 
       // Open New Window for Generated Quote
       const quoteWindow = window.open("", "", "width=800,height=600");
       quoteWindow.document.write(`
-    <html>
-    <head>
-        <title>Equipment Sales Quote</title>
-        <style>
-            body { font-family: Arial, sans-serif; margin: 20px; }
-            h1, h2 { text-align: center; }
-            img { position: absolute; top: 20px; left: 20px; width: 150px; height: auto; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-            table, th, td { border: 1px solid #ddd; }
-            th, td { padding: 8px; text-align: left; }
-            th { background-color: #f2f2f2; }
-            .highlight { background-color: yellow; font-weight: bold; }
-            p { text-align: center; }
-            @media print {
-              #printButton {
-                display: none !important;
-              }
+  <html>
+  <head>
+      <title>Equipment Sales Quote</title>
+      <style>
+          body { font-family: Arial, sans-serif; margin: 20px; }
+          h1, h2 { text-align: center; }
+          img { position: absolute; top: 20px; left: 20px; width: 150px; height: auto; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+          table, th, td { border: 1px solid #ddd; }
+          th, td { padding: 8px; text-align: left; }
+          th { background-color: #f2f2f2; }
+          .highlight { background-color: yellow; font-weight: bold; }
+          p { text-align: center; }
+          @media print {
+            #printButton {
+              display: none !important;
             }
-        </style>
-    </head>
-    <body>
-        <img src="${imageUrl}" alt="Company Logo" />
-        <h1>New Equipment Sales Quote</h1>
-        ${customerInfo}
-        ${companyInfo}
-        ${machineDetails ? machineDetails : ''}
-        ${attachments ? attachments : ''}
-        ${summary}
-        ${signatureSection}
-        ${printButton}
-    </body>
-    </html>
-  `);
+          }
+      </style>
+  </head>
+  <body>
+      <img src="${imageUrl}" alt="Company Logo" />
+      <h1>New Equipment Sales Quote</h1>
+      ${customerInfo}
+      ${companyInfo}
+      ${machineDetails}
+      ${attachments}
+      ${summary}
+      ${signatureSection}
+      ${printButton}
+  </body>
+  </html>
+`);
       quoteWindow.document.close();
     }
+
 
 
   </script>
