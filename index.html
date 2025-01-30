@@ -132,7 +132,7 @@
         <input type="text" id="billing-city" name="account-city" required />
         <label for="state">State</label>
         <input type="text" id="billing-state" name="account-state" required />
-        <label for="zip-code">ZIP Code</label>
+        <label for="zip-code">Zip Code</label>
         <input type="percent" id="billing-zip-code" name="account-zip-code" required />
         <label for="tax-rate">
           Tax Rate (%)
@@ -167,7 +167,7 @@
         <input type="text" id="branch-city" name="company-city" required />
         <label for="state">State</label>
         <input type="text" id="branch-state" name="company-state" required />
-        <label for="zip-code">ZIP Code</label>
+        <label for="zip-code">Zip Code</label>
         <input type="text" id="branch-zip-code" name="company-zip-code" required />
       </div>
     </div>
@@ -182,27 +182,17 @@
             <th>Serial Number</th>
             <th>Price</th>
             <th>Freight</th>
-            <th>Margin (%)</th>
+            <th>Margin</th>
             <th>Machine Specifics</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody id="machine-details">
-          <tr>
-            <td><input type="text" name="category[]" required /></td>
-            <td><input type="text" name="equipment[]" required /></td>
-            <td><input type="text" name="asset-id[]" required /></td>
-            <td><input type="text" name="serial-number[]" required /></td>
-            <td><input type="text" name="price[]" oninput="formatNumber(this)" required /></td>
-            <td><input type="text" name="freight[]" oninput="formatNumber(this)" required /></td>
-            <td><input type="text" name="margin[]" oninput="formatPercent(this)" required /></td>
-            <td><input type="text" name="machine-specifics[]" /></td>
-            <td><button type="button" onclick="removeRow(this)">Remove</button></td>
-          </tr>
         </tbody>
       </table>
       <button type="button" onclick="addRow('machine-details')">Add Machine</button>
     </div>
+
     <div class="section">
       <h2>Attachments</h2>
       <table>
@@ -215,22 +205,11 @@
             <th>Serial Number</th>
             <th>Price</th>
             <th>Freight</th>
-            <th>Margin (%)</th>
+            <th>Margin</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody id="attachments">
-          <tr>
-            <td><input type="text" name="attachment-name[]" required /></td>
-            <td><input type="text" name="attachment-brand[]" required /></td>
-            <td><input type="text" name="attachment-type[]" required /></td>
-            <td><input type="text" name="attachment-asset-id[]" required /></td>
-            <td><input type="text" name="attachment-serial-number[]" required /></td>
-            <td><input type="text" name="attachment-price[]" oninput="formatNumber(this)" required /></td>
-            <td><input type="text" name="attachment-freight[]" oninput="formatNumber(this)" required /></td>
-            <td><input type="text" name="attachment-margin[]" oninput="formatPercent(this)" required /></td>
-            <td><button type="button" onclick="removeRow(this)">Remove</button></td>
-          </tr>
         </tbody>
       </table>
       <button type="button" onclick="addRow('attachments')">Add Attachment</button>
@@ -587,81 +566,84 @@
 
       // Generate Summary Section with Formatted Numbers
       let summary = `
-  <h2>Summary</h2>
-  <table>
-      <tr><td>Sub Total:</td><td>$${subTotal.toFixed(2)}</td></tr>
-      <tr><td>Sales Tax:</td><td>$${salesTax.toFixed(2)}</td></tr>
-`;
+    <h2>Summary</h2>
+    <table>
+        <tr><td>Sub Total:</td><td>$${subTotal.toFixed(2)}</td></tr>
+        <tr><td>Sales Tax:</td><td>$${salesTax.toFixed(2)}</td></tr>
+  `;
 
       if (totalRebate > 0) {
         summary += `<tr><td>Rebate:</td><td>-$${totalRebate.toFixed(2)}</td></tr>`;
       }
 
       summary += `
-      <tr><td><strong>Final Price:</strong></td><td class="highlight">$${finalPrice.toFixed(2)}</td></tr>
-  </table>
-`;
+        <tr><td><strong>Final Price:</strong></td><td class="highlight">$${finalPrice.toFixed(2)}</td></tr>
+    </table>
+  `;
 
       // Signature Section
       const signatureSection = `
-  <h2>Signature</h2>
-  <p>______________________________</p>
-  <p>Authorized Signature</p>
-`;
+    <h2>Signature</h2>
+    <p>______________________________</p>
+    <p>Authorized Signature</p>
+  `;
 
       // Print Button
       const printButton = `
-  <button id='printButton' onclick="window.print()" style="
-      display: block;
-      margin: 20px auto;
-      padding: 10px 20px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 4px;
-  ">Print Quote</button>
-`;
+    <button id='printButton' onclick="window.print()" style="
+        display: block;
+        margin: 20px auto;
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+    ">Print Quote</button>
+  `;
 
       // Open New Window for Generated Quote
       const quoteWindow = window.open("", "", "width=800,height=600");
       quoteWindow.document.write(`
-  <html>
-  <head>
-      <title>Equipment Sales Quote</title>
-      <style>
-          body { font-family: Arial, sans-serif; margin: 20px; }
-          h1, h2 { text-align: center; }
-          img { position: absolute; top: 20px; left: 20px; width: 150px; height: auto; }
-          table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-          table, th, td { border: 1px solid #ddd; }
-          th, td { padding: 8px; text-align: left; }
-          th { background-color: #f2f2f2; }
-          .highlight { background-color: yellow; font-weight: bold; }
-          p { text-align: center; }
-          @media print {
-            #printButton {
-              display: none !important;
+    <html>
+    <head>
+        <title>Equipment Sales Quote</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 0; padding: 15mm; }
+            h1 { text-align: center; font-size: 20px; padding-bottom: 15px; }
+            h2 { text-align: center; font-size: 16px; }
+            img { position: absolute; top: 30px; left: 30px; width: 150px; height: auto; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 12px; }
+            table, th, td { border: 1px solid #ddd; }
+            th, td { padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; }
+            .highlight { background-color: yellow; font-weight: bold; }
+            p { text-align: center; font-size: 12px; }
+            @media print {
+              @page { size: A4; margin: 15mm; }
+              body { margin: 0; }
+              #printButton { display: none !important; }
+              .container { page-break-inside: avoid; }
             }
-          }
-      </style>
-  </head>
-  <body>
-      <img src="${imageUrl}" alt="Company Logo" />
-      <h1>Equipment Sales Quote</h1>
-      ${customerInfo}
-      ${companyInfo}
-      ${machineDetails}
-      ${attachments}
-      ${summary}
-      ${signatureSection}
-      ${printButton}
-  </body>
-  </html>
-`);
+        </style>
+    </head>
+    <body>
+        <img src="${imageUrl}" alt="Company Logo" />
+        <div class="container">
+          <h1>New Equipment Sales Quote</h1>
+          ${customerInfo}
+          ${companyInfo}
+          ${machineDetails}
+          ${attachments}
+          ${summary}
+          ${signatureSection}
+        </div>
+        ${printButton}
+    </body>
+    </html>
+  `);
       quoteWindow.document.close();
     }
-
 
 
   </script>
