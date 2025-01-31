@@ -505,8 +505,8 @@ function generateQuote() {
         <title>Equipment Sales Quote</title>
         <style>
             body { font-family: Arial, sans-serif; margin: 0; padding: 15mm; }
-            h1 { text-align: center; font-size: 20px; padding-bottom: 15px; }
-            h2 { text-align: center; font-size: 16px; }
+            h1 { text-align: center; font-size: 20px; }
+            h2 { text-align: center; font-size: 16px; padding-top: 15px }
             img { position: absolute; top: 30px; left: 30px; width: 150px; height: auto; }
             table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 12px; }
             table, th, td { border: 1px solid #ddd; }
@@ -525,7 +525,7 @@ function generateQuote() {
     <body>
         <img src="${imageUrl}" alt="Company Logo" />
         <div class="container">
-          <h1>New Equipment Sales Quote</h1>
+          <h1>Equipment Sales Quote</h1>
           ${customerInfo}
           ${companyInfo}
           ${machineDetails}
