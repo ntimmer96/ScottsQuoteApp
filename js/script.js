@@ -480,7 +480,7 @@ function generateQuote() {
   const signatureSection = `
     <h2>Signature</h2>
     <p>______________________________</p>
-    <p>Authorized Signature</p>
+    <p>Quote is valid for 30 days from date of issuance.</p>
   `;
 
   // Print Button
