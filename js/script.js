@@ -458,21 +458,24 @@ function generateQuote() {
   const finalPrice = subTotal + salesTax - totalRebate;
 
   // Generate Summary Section with Formatted Numbers
+  const formattedSubTotal = formatCurrency(subTotal);
+  const formattedSalesTax = formatCurrency(salesTax);
+  const formattedTotalRebate = formatCurrency(totalRebate);
+  const formattedFinalPrice = formatCurrency(finalPrice);
+
   let summary = `
     <h2>Summary</h2>
     <table>
-        <tr><td>Sub Total:</td><td>$${subTotal.toFixed(2)}</td></tr>
-        <tr><td>Sales Tax:</td><td>$${salesTax.toFixed(2)}</td></tr>
+        <tr><td>Sub Total:</td><td>$${formattedSubTotal}</td></tr>
+        <tr><td>Sales Tax:</td><td>$${formattedSalesTax}</td></tr>
   `;
 
   if (totalRebate > 0) {
-    summary += `<tr><td>Rebate:</td><td>-$${totalRebate.toFixed(2)}</td></tr>`;
+    summary += `<tr><td>Rebate:</td><td>-$${formattedTotalRebate}</td></tr>`;
   }
 
   summary += `
-        <tr><td><strong>Final Price:</strong></td><td class="highlight">$${finalPrice.toFixed(
-          2
-        )}</td></tr>
+        <tr><td><strong>Final Price:</strong></td><td class="highlight">$${formattedFinalPrice}</td></tr>
     </table>
   `;
 
@@ -480,7 +483,7 @@ function generateQuote() {
   const signatureSection = `
     <h2>Signature</h2>
     <p>______________________________</p>
-    <p>Quote is valid for 30 days from date of issuance.</p>
+    <p>Quote is valid for 30 days from date of Issuance.</p>
   `;
 
   // Print Button
@@ -505,9 +508,8 @@ function generateQuote() {
         <title>Equipment Sales Quote</title>
         <style>
             body { font-family: Arial, sans-serif; margin: 0; padding: 15mm; }
-            h1 { text-align: center; font-size: 20px; }
-            h2 { text-align: center; font-size: 16px; padding-top: 15px }
-            img { position: absolute; top: 30px; left: 30px; width: 150px; height: auto; }
+            h1, h2 { text-align: center; font-size: 16px; }
+            img { position: absolute; top: 20px; left: 20px; width: 200px; height: auto; }
             table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 12px; }
             table, th, td { border: 1px solid #ddd; }
             th, td { padding: 8px; text-align: left; }
@@ -525,7 +527,7 @@ function generateQuote() {
     <body>
         <img src="${imageUrl}" alt="Company Logo" />
         <div class="container">
-          <h1>Equipment Sales Quote</h1>
+          <h1>New Equipment Sales Quote</h1>
           ${customerInfo}
           ${companyInfo}
           ${machineDetails}
