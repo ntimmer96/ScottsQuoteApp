@@ -527,7 +527,7 @@ function generateQuote() {
     <body>
         <img src="${imageUrl}" alt="Company Logo" />
         <div class="container">
-          <h1>New Equipment Sales Quote</h1>
+          <h1>Equipment Sales Quote</h1>
           ${customerInfo}
           ${companyInfo}
           ${machineDetails}
