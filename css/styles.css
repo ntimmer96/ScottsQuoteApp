@@ -91,3 +91,29 @@ button {
     display: none !important;
   }
 }
+
+.button-container {
+  display: flex; /* Use flexbox layout */
+  justify-content: center; /* Center the buttons horizontally */
+}
+
+.button-container button {
+  width: 150px; /* Set a fixed width for the buttons (adjust as needed) */
+  padding: 10px 20px; /* Ensure the padding remains consistent */
+  background-color: #28a745; /* Green color */
+  color: white; /* Text color */
+  border: none; /* Border style */
+  cursor: pointer; /* Cursor style */
+  border-radius: 4px; /* Border-radius */
+  text-align: center; /* Center the text within the button */
+  margin: 0 5px; /* Space on the sides only */
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+}
